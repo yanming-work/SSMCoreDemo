@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:p="http://www.springframework.org/schema/p"
+  xmlns:context="http://www.springframework.org/schema/context"
+  xmlns:aop="http://www.springframework.org/schema/aop"
+  xmlns:tx="http://www.springframework.org/schema/tx"
+  xmlns:util="http://www.springframework.org/schema/util"
+  xsi:schemaLocation="http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans.xsd
+    http://www.springframework.org/schema/context
+    http://www.springframework.org/schema/context/spring-context.xsd
+    http://www.springframework.org/schema/tx
+    http://www.springframework.org/schema/tx/spring-tx.xsd
+    http://www.springframework.org/schema/aop
+    http://www.springframework.org/schema/aop/spring-aop.xsd
+    http://www.springframework.org/schema/util 
+    http://www.springframework.org/schema/util/spring-util.xsd">
+  		<!-- 导入数据源的相关配置 -->
+	<import resource="classpath:spring/spring-dataSource-druid.xml" />
+
+  
+    <!-- myBatis文件 -->  
+    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">  
+        <property name="dataSource" ref="dataSource" />  
+        <!-- 自动扫描entity目录, 省掉Configuration.xml里的手工配置 -->  
+        <property name="mapperLocations" value="classpath:mapper/*.xml" /> 
+		<property name="configLocation" value="classpath:spring/mybatis-config.xml"></property>
+        <property name="typeAliasesPackage" value="com.test.web.model" />
+        <!-- 低版本设置数据库类型Oracle，Mysql，Maria DB，SQ利特，HSQL DB，PostfreSql 六种数据库,PageHelper插件4.0.0以后的版本支持自动识别使用的数据库，可以不用配置 
+        <property name="plugins">
+            <array>
+            	    <bean class="com.github.pagehelper.PageHelper">
+                    <property name="properties">
+                        <value>
+                            dialect=${mybatis.pagehelper.dialect}
+                        </value>
+                    </property>
+            </array>
+        </property>
+                 -->
+    </bean>  
+  
+    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">  
+        <property name="basePackage" value="com.test.web.dao.mybatis" />  
+        <property name="sqlSessionFactoryBeanName" value="sqlSessionFactory" />  
+    </bean>  
+  
+    <!-- 配置事务管理器 -->  
+    <bean id="transactionManager"  
+        class="org.springframework.jdbc.datasource.DataSourceTransactionManager">  
+        <property name="dataSource" ref="dataSource" />  
+    </bean>  
+  
+    <!-- 注解方式配置事物 -->   <!-- 声明式事务 --> 
+    <!-- <tx:annotation-driven transaction-manager="transactionManager" /> -->  
+  
+    <!-- 拦截器方式配置事物 -->  
+    <tx:advice id="transactionAdvice" transaction-manager="transactionManager">  
+        <tx:attributes>  
+           
+			<tx:method name="delete*" propagation="REQUIRED" read-only="false"
+				rollback-for="Exception" />
+			<tx:method name="insert*" propagation="REQUIRED" read-only="false"
+				rollback-for="Exception" />
+			<tx:method name="save*" propagation="REQUIRED" read-only="false"
+				rollback-for="Exception" />
+			<tx:method name="add*" propagation="REQUIRED" read-only="false"
+				rollback-for="Exception" />
+			<tx:method name="update*" propagation="REQUIRED" read-only="false"
+				rollback-for="Exception" />
+
+			<tx:method name="del*" propagation="REQUIRED" read-only="false"
+				rollback-for="Exception" />
+			<tx:method name="batch*" propagation="REQUIRED" read-only="false"
+				rollback-for="Exception" />
+			<tx:method name="bach*" propagation="REQUIRED" read-only="false"
+				rollback-for="Exception" />
+			<tx:method name="cancel*" propagation="REQUIRED" read-only="false"
+				rollback-for="Exception" />
+			<tx:method name="dis*" propagation="REQUIRED" read-only="false"
+				rollback-for="Exception" />
+			<tx:method name="en*" propagation="REQUIRED" read-only="false"
+				rollback-for="Exception" />
+			<tx:method name="query*" read-only="true" />
+
+			<tx:method name="get*" propagation="SUPPORTS" read-only="true" />
+			<tx:method name="find*" propagation="SUPPORTS" read-only="true" />
+			<tx:method name="select*" propagation="SUPPORTS" read-only="true" />
+			<tx:method name="count*" propagation="SUPPORTS" read-only="true" />
+
+
+  
+        </tx:attributes>  
+    </tx:advice>  
+
+ <aop:config>
+        <aop:advisor advice-ref="transactionAdvice" pointcut="execution(* com.test.web.dao.service.*.*(..))"/>
+    </aop:config>
+  
+</beans>  

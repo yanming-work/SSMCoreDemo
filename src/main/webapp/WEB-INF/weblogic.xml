@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<weblogic-web-app xmlns="http://xmlns.oracle.com/weblogic/weblogic-web-app" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/ejb-jar_3_0.xsd     http://xmlns.oracle.com/weblogic/weblogic-web-app http://xmlns.oracle.com/weblogic/weblogic-web-app/1.2/weblogic-web-app.xsd">
+    <context-root>SSMCoreDemo</context-root>
+   
+    
+	<jsp-descriptor>
+		<keepgenerated>false</keepgenerated>
+		<!-- 
+		page-check-seconds默认值是1，表示每隔1秒对JSP页面进行检查，检查JSP页面是否被修改、是否需要重新编译。
+		系统上线后会影响性能，需要对该默认值修改为-1，表示永不检查
+ 		-->
+		<page-check-seconds>1</page-check-seconds>
+		<verbose>true</verbose>
+		<debug>true</debug>
+	</jsp-descriptor>
+	
+	
+    <container-descriptor>
+     	<!-- servlet-reload-check-secs的默认值也是1，每隔1秒检查servlet是否被修改并需要重新编译，很影响性能。这里建议修改为-1，表示永不检查-->
+    	<servlet-reload-check-secs>1</servlet-reload-check-secs>
+    	<!-- 指示优先从部署项目的WEB-INF/lib目录下加载jar包，解决WegLogic与hibernate包冲突问题 -->
+      <!--  <prefer-web-inf-classes>true</prefer-web-inf-classes> -->
+         <!-- 添加优先加载jar包 ,与prefer-web-inf-classes 二选一-->
+         <prefer-application-packages>
+            <package-name>org.springframework.*</package-name>
+            <package-name>javax.validation.*</package-name>
+            <package-name>com.alibaba.druid.*</package-name>
+        </prefer-application-packages>
+         
+        <show-archived-real-path-enabled>true</show-archived-real-path-enabled>
+    </container-descriptor>
+</weblogic-web-app>

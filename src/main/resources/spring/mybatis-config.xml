@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration   
+    PUBLIC "-//mybatis.org//DTD Config 3.0//EN"  
+    "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+    <settings>
+        <!-- 打印查询语句 -->
+        <setting name="logImpl" value="STDOUT_LOGGING" />
+         <!-- 解决map value 等于null无法获取值-->  
+        <setting name="callSettersOnNulls" value="true"/>
+    </settings>
+    
+    <!-- mapper已经在spring-mybatis.xml中的sqlSessionFactory配置，这里不再需要配置 -->
+<!--     <mappers> -->
+<!--         <mapper resource="com/winfo/msa/mapper/UserInfoDaoMapper.xml" /> -->
+<!--     </mappers> -->
+<!-- 打印SQL只需要加一个setting就可以了。
+	mybatis的日志打印方式比较多，SLF4J | LOG4J | LOG4J2 | JDK_LOGGING | COMMONS_LOGGING | STDOUT_LOGGING | NO_LOGGING，可以根据自己的需要进行配置
+ -->
+ 
+ <!-- 分页配置，PageHelper插件4.0.0以后的版本支持自动识别使用的数据库，可以不用配置dialect  -->
+ <plugins>
+    <plugin interceptor="com.github.pagehelper.PageInterceptor">
+        <!-- RowBounds参数offset作为PageNum使用 - 默认不使用 -->
+        <property name="offsetAsPageNum" value="false"/>
+        <!-- RowBounds是否进行count查询 - 默认不查询 -->
+        <property name="rowBoundsWithCount" value="false"/>
+        <!-- 当设置为true的时候，如果pagesize设置为0（或RowBounds的limit=0），就不执行分页，返回全部结果 -->
+        <property name="pageSizeZero" value="false"/>
+        <!-- 分页合理化 -->
+        <property name="reasonable" value="false"/>
+        <!-- 是否支持接口参数来传递分页参数，默认false -->
+        <property name="supportMethodsArguments" value="false"/>
+        <property name="returnPageInfo" value="none"/>
+    </plugin>
+</plugins>
+
+<!-- 
+
+String orderBy = PageHelper.getOrderBy();    //获取orderBy语句
+    Page<?> page = PageHelper.startPage(Object params);
+    Page<?> page = PageHelper.startPage(int pageNum, int pageSize);
+    Page<?> page = PageHelper.startPage(int pageNum, int pageSize, boolean isCount);
+    Page<?> page = PageHelper.startPage(pageNum, pageSize, orderBy);
+    Page<?> page = PageHelper.startPage(pageNum, pageSize, isCount, isReasonable);    //isReasonable分页合理化,null时用默认配置
+    Page<?> page = PageHelper.startPage(pageNum, pageSize, isCount, isReasonable, isPageSizeZero);    //isPageSizeZero是否支持PageSize为0，true且pageSize=0时返回全部结果，false时分页,null时用默认配置
+
+ -->
+
+</configuration>

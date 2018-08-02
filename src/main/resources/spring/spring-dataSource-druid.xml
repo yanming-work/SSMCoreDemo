@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:aop="http://www.springframework.org/schema/aop" xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="
+		http://www.springframework.org/schema/beans 
+		http://www.springframework.org/schema/beans/spring-beans.xsd 
+		http://www.springframework.org/schema/context 
+		http://www.springframework.org/schema/context/spring-context.xsd
+		http://www.springframework.org/schema/aop
+		http://www.springframework.org/schema/aop/spring-aop.xsd
+		http://www.springframework.org/schema/tx
+		http://www.springframework.org/schema/tx/spring-tx.xsd">
+
+
+
+	<!-- 加载配置文件 -->
+	<context:property-placeholder location="classpath:db.properties"
+		file-encoding="utf-8" ignore-unresolvable="true" />
+
+	<!-- 连接池配置 -->
+
+
+	<!-- 数据源配置msa -->
+	<bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource"
+		init-method="init" destroy-method="close">
+		<property name="driverClassName" value="${jdbc.driverClassName}" />
+		<property name="url" value="${database.url}" />
+		<property name="username" value="${database.username}"></property>
+		<property name="password" value="${database.password}" />
+		<property name="filters" value="${db.druid.filters}"></property>
+		<property name="maxActive" value="${db.druid.pool.maxActive}"></property>
+		<property name="initialSize" value="${db.druid.pool.initialSize}"></property>
+		<property name="minIdle" value="${db.druid.pool.minIdle}"></property>
+		<property name="maxWait" value="${db.druid.maxWait}"></property>
+		<property name="timeBetweenEvictionRunsMillis" value="${db.druid.timeBetweenEvictionRunsMillis}"></property>
+		<property name="minEvictableIdleTimeMillis" value="${db.druid.minEvictableIdleTimeMillis}"></property>
+		<property name="validationQuery" value="${db.druid.validationQuery}"></property>
+		<property name="testWhileIdle" value="${db.druid.testWhileIdle}"></property>
+		<property name="testOnBorrow" value="${db.druid.testOnBorrow}"></property>
+		<property name="testOnReturn" value="${db.druid.testOnReturn}"></property>
+		<property name="poolPreparedStatements" value="${db.druid.poolPreparedStatements}"></property>
+		<property name="maxOpenPreparedStatements" value="${db.druid.maxOpenPreparedStatements}"></property>
+
+
+	</bean>
+
+	<!-- SpringJdbc -->
+	<bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+	
+
+	
+
+</beans>  
